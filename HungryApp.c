@@ -130,7 +130,7 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
         head1->next=temp;
         temp=head1;
         head3=temp1;
-        while((head3!=NULL)&&(head3->nameU!=head1->name)){
+        while((head3!=NULL)&&(strcmp(head3->nameU,head1->name)!=0)){
             head3=head3->nextU;
         }
         if(head3==NULL){
@@ -138,7 +138,7 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
         }
         else{
             head4=temp2;
-            while((head4!=NULL)&&((head4->ava!=1)&&(head4->Add!=head3->addU))){
+            while((head4!=NULL)&&((head4->ava!=1)&&(strcmp(head4->Add,head3->addU)!=0))){
                 head4=head4->nextA;
             }    //User details are known now assign details to agent
             if(head4==NULL){
@@ -245,12 +245,10 @@ void PrintLiveOrders(struct Order* head){
 }
 void PrintAreawiseAgent(struct Agent* head, char area[]){
     printf("Agents currently  in the area are:\n");
-    while(head!=NULL){
-        if(head->Add==area){
-            printf("%s\n",head->nameA);
-        }
+    while((head!=NULL)&&(strcmp(area,head->Add)!=0)){
         head=head->nextA;
     }
+    printf("%s\n",head->nameA);
 }
 void PrintRestaurant(struct Rest* head){
     int i;
@@ -265,6 +263,7 @@ void PrintRestaurant(struct Rest* head){
             printf("%s ",head->menu[i]);
         }
         printf("\n\n");
+        head=head->nextR;
     }
 }
 void main(){
