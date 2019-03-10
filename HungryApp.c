@@ -158,17 +158,22 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
     }
     return head1;
 }
-void DeleteNode(struct Order* pre, struct Order* target, struct Order* n){
+struct Order* DeleteNode(struct Order* temp, struct Order* n){
+    struct Order* pre=NULL;
+    while(temp!=n){
+        pre=temp;
+        temp=temp->next;
+    }
+    free(temp);
+    n=n->next;
     if(pre!=NULL){
         pre->next=n;
-    }                       //probably does not work
-    free(target);
-    printf("Thank you for ordering!\n");
+    }
+    return n;
 }
 void Delivery(struct Order* head, struct Agent* head1){
-    struct Order* temp, *ptr, *headptr;
+    struct Order* headptr;
     headptr=head;
-    temp=NULL;
     char op;
     while(head!=NULL){
         printf("Is the following order completed?:\n");
@@ -176,40 +181,32 @@ void Delivery(struct Order* head, struct Agent* head1){
         printf("Delivery for: %s\n",head->name);
         printf("Item: %s\n",head->item);
         printf("Enter 'y' for yes and 'n' for no\n");
-        scanf("%c",op);
+        scanf("%c",&op);
         if(op=='y'){
-            ptr=temp;
-            temp=head->next;
-            head=head->next;
-            DeleteNode(ptr, temp, head);
             while(head->agentAssg!=head1->IDA){
                 head1=head1->nextA;
             }
             head1->ava=1;
+            head=DeleteNode(headptr,head);
         }
         else if(op=='n'){
             head=head->next;
         }
-        if(head==NULL){
-            head=headptr;
-        }
     }
 }
 void Cancel(struct Order* head, struct Agent* head1, int n){
-    struct Order* temp, *ptr, *headptr;
+    struct Order* headptr;
     headptr=head;
-    temp=NULL;
     while(head!=NULL){
-        ptr=temp;
-        temp=head->next;
-        head=head->next;
         if(head->orderno==n){
             while(head1->IDA!=head->agentAssg){
                 head1=head1->nextA;
             }
             head1->ava=1;
-            DeleteNode(ptr, temp, head);
+            head=DeleteNode(headptr,head);
+            printf("Your order has been canceled\n");
         }
+        head=head->next;
     }
 }
 void PrintAgent(struct Agent* head){
@@ -245,7 +242,7 @@ void PrintLiveOrders(struct Order* head){
 }
 void PrintAreawiseAgent(struct Agent* head, char area[]){
     printf("Agents currently  in the area are:\n");
-    while((head!=NULL)&&(strcmp(area,head->Add)!=0)){
+    while((head!=NULL)&&(strcmp(head->Add,area)!=0)){
         head=head->nextA;
     }
     printf("%s\n",head->nameA);
