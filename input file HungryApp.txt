@@ -1,3 +1,4 @@
+5
 mediangrilled
 manishnagar
 indian
@@ -18,7 +19,7 @@ chai
 10
 haldiram
 ajni
-sweetsnamkeen
+sweetsandnamkeen
 samosa
 kachori
 laddu
@@ -43,6 +44,7 @@ noodles
 roll
 friedrice
 10
+5
 denny
 manishnagar
 8172537221
@@ -58,6 +60,7 @@ omkarnagar
 nishii
 manewada
 9123718346
+5
 anthony
 omkarnagar
 2025550147

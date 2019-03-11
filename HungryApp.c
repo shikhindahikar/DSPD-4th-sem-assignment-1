@@ -26,8 +26,10 @@ struct Order{
 };
 struct Rest* initRest(struct Rest* head){
     struct Rest* temp=NULL;
-    int i,j;
-    for(i=0;i<5;i++){
+    int i,j,n;
+    printf("Enter the number of restaurants\n");
+    scanf("%d",&n);
+    for(i=0;i<n;i++){
         head=(struct Rest*)malloc(sizeof(struct Rest));
         printf("Enter the name of Restaurant\n");
         scanf("%s",head->nameR);
@@ -48,8 +50,10 @@ struct Rest* initRest(struct Rest* head){
 }
 struct User* initUser(struct User* head){
     struct User* temp=NULL;
-    int i;
-    for(i=0;i<5;i++){
+    int i,n;
+    printf("Enter the number of users\n");
+    scanf("%d",&n);
+    for(i=0;i<n;i++){
         head=(struct User*)malloc(sizeof(struct User));
         printf("Enter the name of the User\n");
         scanf("%s",head->nameU);
@@ -65,8 +69,10 @@ struct User* initUser(struct User* head){
 }
 struct Agent* initAgent(struct Agent* head){
     struct Agent* temp=NULL;
-    int i;
-    for(i=0;i<5;i++){
+    int i,n;
+    printf("Enter the number of agents\n");
+    scanf("%d",&n);
+    for(i=0;i<n;i++){
         head=(struct Agent*)malloc(sizeof(struct Agent));
         printf("Enter the name of the Agent\n");
         scanf("%s",head->nameA);
@@ -158,18 +164,18 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
     }
     return head1;
 }
-struct Order* DeleteNode(struct Order* temp, struct Order* n){
+struct Order* DeleteNode(struct Order* temp, struct Order* head){
     struct Order* pre=NULL;
-    while(temp!=n){
+    while(temp!=head){
         pre=temp;
         temp=temp->next;
     }
     free(temp);
-    n=n->next;
+    head=head->next;
     if(pre!=NULL){
-        pre->next=n;
+        pre->next=head;
     }
-    return n;
+    return head;
 }
 void Delivery(struct Order* head, struct Agent* head1){
     struct Order* headptr;
