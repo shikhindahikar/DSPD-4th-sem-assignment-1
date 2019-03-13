@@ -71,7 +71,7 @@ struct Agent* initAgent(struct Agent* head){
         printf("Enter the name of the Agent\n");
         scanf("%s",head->nameA);
         printf("Enter the address of the Agent\n");
-        scanf("%s",head->add);
+        gets(head->add);
         printf("Enter the agent phone number\n");
         scanf("%s",head->phoneA);
         head->IDA=i+1;
@@ -113,9 +113,6 @@ void SearchBasedOnArea(struct Rest* head, char ptr[]){
         head=head->nextR;
     }
 }
-<<<<<<< HEAD
-
-=======
 struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct User* head3, struct Agent* head4){
     struct Order* temp1, *temp2,*temp=NULL;
     int i;
@@ -141,7 +138,7 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
         }
         else{
             head4=temp2;
-            while((head4!=NULL)&&((head4->ava!=1)&&(strcmp(head4->Add,head3->addU)!=0))){
+            while((head4!=NULL)&&((head4->ava!=1)&&(strcmp(head4->add,head3->addU)!=0))){
                 head4=head4->nextA;
             }    //User details are known now assign details to agent
             if(head4==NULL){
@@ -212,7 +209,6 @@ void Cancel(struct Order* head, struct Agent* head1, int n){
         head=head->next;
     }
 }
->>>>>>> parent of 6907c09... n values can be taken as input
 void PrintAgent(struct Agent* head){
     printf("All agent's details are as follows...\n");
     while(head!=NULL){
@@ -246,7 +242,7 @@ void PrintLiveOrders(struct Order* head){
 }
 void PrintAreawiseAgent(struct Agent* head, char area[]){
     printf("Agents currently  in the area are:\n");
-    while((head!=NULL)&&(strcmp(head->add,area)!=0)){
+    while((head!=NULL)&&(strcmp(area,head->add)!=0)){
         head=head->nextA;
     }
     printf("%s\n",head->nameA);
@@ -279,12 +275,12 @@ void main(){
     rest=initRest(rest);
     user=initUser(user);
     agent=initAgent(agent);
-    printf("Following are the services we provide:\n");
-    printf("Search:\n1. Based on category\n2. Based on cuisine\n3. Based on area\n");
-    printf("Order:\n4. Place order\n5. Delivery\n6. Cancel order\n");
-    printf("Show details:\n7. Print agent list with details\n8. Print live orders\n9. Print area wise agents\n10. Print all restaurant details\n11. Exit\n");
-    printf("Enter index number of the service you want...\n");
     while(f==1){
+        printf("Following are the services we provide:\n");
+        printf("Search:\n1. Based on category\n2. Based on cuisine\n3. Based on area\n");
+        printf("Order:\n4. Place order\n5. Delivery\n6. Cancel order\n");
+        printf("Show details:\n7. Print agent list with details\n8. Print live orders\n9. Print area wise agents\n10. Print all restaurant details\n11. Exit\n");
+        printf("Enter index number of the service you want...\n");
         scanf("%d",&x);
         switch(x){
             case 1: printf("Enter the category\n");
