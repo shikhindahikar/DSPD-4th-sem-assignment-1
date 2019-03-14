@@ -1,8 +1,8 @@
 #include "HungryApp.h"
-struct Rest* initRest(struct Rest* head){
+struct Rest* initRest(struct Rest* head, int n){
     struct Rest* temp=NULL;
     int i,j;
-    for(i=0;i<5;i++){
+    for(i=0;i<n;i++){
         head=(struct Rest*)malloc(sizeof(struct Rest));
         printf("Enter the name of Restaurant\n");
         scanf("%s",head->nameR);
@@ -21,10 +21,10 @@ struct Rest* initRest(struct Rest* head){
     }
     return head;
 }
-struct User* initUser(struct User* head){
+struct User* initUser(struct User* head, int n){
     struct User* temp=NULL;
     int i;
-    for(i=0;i<5;i++){
+    for(i=0;i<n;i++){
         head=(struct User*)malloc(sizeof(struct User));
         printf("Enter the name of the User\n");
         scanf("%s",head->nameU);
@@ -38,10 +38,10 @@ struct User* initUser(struct User* head){
     }
     return head;
 }
-struct Agent* initAgent(struct Agent* head){
+struct Agent* initAgent(struct Agent* head, int n){
     struct Agent* temp=NULL;
     int i;
-    for(i=0;i<5;i++){
+    for(i=0;i<n;i++){
         head=(struct Agent*)malloc(sizeof(struct Agent));
         printf("Enter the name of the Agent\n");
         scanf("%s",head->nameA);
@@ -49,6 +49,8 @@ struct Agent* initAgent(struct Agent* head){
         scanf("%s",head->Add);
         printf("Enter the agent phone number\n");
         scanf("%s",head->phoneA);
+        printf("Enter the salary\n");
+        scanf("%f",&head->sal);
         head->IDA=i+1;
         head->ava=1;
         head->nextA=temp;
@@ -59,7 +61,7 @@ struct Agent* initAgent(struct Agent* head){
 void SearchBasedOnCategory(struct Rest* head, char ptr[]){
     int i;
     printf("The results of given category are\n");
-    for(i=0;i<5;i++){
+    while(head!=NULL){
         if(strcmp(ptr,head->category)==0){
             printf("%s\n",head->nameR);
         }
@@ -69,7 +71,7 @@ void SearchBasedOnCategory(struct Rest* head, char ptr[]){
 void SearchBasedOnCuisine(struct Rest* head, char ptr[]){
     int i,j;
     printf("The given cuisine can be found here\n");
-    for(i=0;i<5;i++){
+    while(head!=NULL){
         for(j=0;j<5;j++){
             if(strcmp(ptr,head->menu[j])==0){
                 printf("%s\n",head->nameR);
@@ -81,7 +83,7 @@ void SearchBasedOnCuisine(struct Rest* head, char ptr[]){
 void SearchBasedOnArea(struct Rest* head, char ptr[]){
     int i;
     printf("The Restaurants in given area are\n");
-    for(i=0;i<5;i++){
+    while(head!=NULL){
         if(strcmp(ptr,head->addR)==0){
             printf("%s\n",head->nameR);
         }
@@ -134,7 +136,7 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
     }
     return head1;
 }
- struct Order* DeleteNode(struct Order **head, int x, struct Agent* a){
+ struct Order* DeleteNode(struct Order **head, int x, struct Agent* a,int f){
     struct Order* prev, *temp= *head;
     prev=head;
     if(temp!=NULL && temp->orderno==x){
@@ -159,6 +161,9 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
     while(a!=NULL){
         if(a->IDA==temp->agentAssg){
             a->ava=1;
+            if(f==1){
+                a->sal=a->sal*1.1;
+            }
         }
         a=a->nextA;
     }
@@ -171,14 +176,14 @@ struct Order* Delivery(struct Order* head, struct Agent* head1){
     int x;
     printf("Enter the order number which is completed\n");
     scanf("%d",&x);
-    head=DeleteNode(&head, x, head1);
+    head=DeleteNode(&head, x, head1, 1);
     return head;
 }
 struct Order* Cancel(struct Order* head, struct Agent* head1){
     int x;
     printf("Enter the order number to cancel\n");
     scanf("%d",&x);
-    head=DeleteNode(&head,x,head1);
+    head=DeleteNode(&head,x,head1, 0);
     printf("Order is canceled\n");
     return head;
 }
@@ -189,6 +194,7 @@ void PrintAgent(struct Agent* head){
         printf("Agent ID: %d\n",head->IDA);
         printf("Agent's current working area: %s\n",head->Add);
         printf("Agent's contact details: %s\n",head->phoneA);
+        printf("Agent's current salary: %f\n",head->sal);
         if(head->ava==1){
             printf("Agent available for service\n");
         }
@@ -248,9 +254,15 @@ void main(){
     struct Agent* agent=NULL;
     struct Order* o=NULL;
     printf("Initialize restaurants\n");
-    rest=initRest(rest);
-    user=initUser(user);
-    agent=initAgent(agent);
+    printf("Enter the number of restaurants\n");
+    scanf("%d",&i);
+    rest=initRest(rest,i);
+    printf("Enter the number of restaurants\n");
+    scanf("%d",&i);
+    user=initUser(user,i);
+    printf("Enter the number of restaurants\n");
+    scanf("%d",&i);
+    agent=initAgent(agent,i);
     while(f==1){
         printf("\n");
         printf("Following are the services we provide:\n");

@@ -22,7 +22,8 @@ struct User{                //Data which describes user
 struct Agent{           //Data which describes agent
     char nameA[20], phoneA[10], Add[20];
     int IDA;             //agent will be assigned a agent ID for convenience
-    int ava;                //when  ava = 1 agent is available otherwise busy
+    int ava;
+    float sal;                //when  ava = 1 agent is available otherwise busy
     struct agent* nextA;
 };
 struct Order{
