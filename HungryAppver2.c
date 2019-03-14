@@ -86,7 +86,7 @@ void SearchBasedOnCategory(struct Rest* head, char ptr[]){
     printf("The results of given category are\n");
     for(i=0;i<5;i++){
         if(strcmp(ptr,head->category)==0){
-            printf("%s",head->nameR);
+            printf("%s\n",head->nameR);
         }
         head=head->nextR;
     }
@@ -97,7 +97,7 @@ void SearchBasedOnCuisine(struct Rest* head, char ptr[]){
     for(i=0;i<5;i++){
         for(j=0;j<5;j++){
             if(strcmp(ptr,head->menu[j])==0){
-                printf("%s",head->nameR);
+                printf("%s\n",head->nameR);
             }
         }
         head=head->nextR;
@@ -108,7 +108,7 @@ void SearchBasedOnArea(struct Rest* head, char ptr[]){
     printf("The Restaurants in given area are\n");
     for(i=0;i<5;i++){
         if(strcmp(ptr,head->addR)==0){
-            printf("%s",head->nameR);
+            printf("%s\n",head->nameR);
         }
         head=head->nextR;
     }
@@ -127,6 +127,7 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
         printf("Enter name of item to order\n");
         scanf("%s",head1->item);
         (head1->orderno)=order+1;
+        order++;
         head1->next=temp;
         temp=head1;
         head3=temp1;
@@ -158,56 +159,53 @@ struct Order* placeOrder(struct Order* head1, int n, struct Rest* head2, struct 
     }
     return head1;
 }
- struct Order* DeleteNode(struct Order* temp, struct Order* n){
-    struct Order* pre=NULL;
-    while(temp!=n){
-        pre=temp;
+ struct Order* DeleteNode(struct Order **head, int x, struct Agent* a){
+    struct Order* prev, *temp= *head;
+    prev=head;
+    if(temp!=NULL && temp->orderno==x){
+        *head=temp->next;
+        while(a!=NULL){
+            if(a->IDA==temp->agentAssg){
+                a->ava=1;
+            }
+            a=a->nextA;
+        }
+        free(temp);
+        temp=NULL;
+        return *head;
+    }
+    while(temp!=NULL && temp->orderno!=x){
+        prev=temp;
         temp=temp->next;
     }
+    if(temp==NULL){
+        return *head;
+    }
+    while(a!=NULL){
+        if(a->IDA==temp->agentAssg){
+            a->ava=1;
+        }
+        a=a->nextA;
+    }
+    prev->next=temp->next;
     free(temp);
-    n=n->next;
-    if(pre!=NULL){
-        pre->next=n;
-    }
-    return n;
+    temp=NULL;
+    return *head;
 }
- void Delivery(struct Order* head, struct Agent* head1){
-    struct Order* headptr;
-    headptr=head;
-    char op;
-    while(head!=NULL){
-        printf("Is the following order completed?:\n");
-        printf("Order number: %d\n",head->orderno);
-        printf("Delivery for: %s\n",head->name);
-        printf("Item: %s\n",head->item);
-        printf("Enter 'y' for yes and 'n' for no\n");
-        scanf("%c",&op);
-        if(op=='y'){
-            while(head->agentAssg!=head1->IDA){
-                head1=head1->nextA;
-            }
-            head1->ava=1;
-            head=DeleteNode(headptr,head);
-        }
-        else if(op=='n'){
-            head=head->next;
-        }
-    }
+struct Order* Delivery(struct Order* head, struct Agent* head1){
+    int x;
+    printf("Enter the order number which is completed\n");
+    scanf("%d",&x);
+    head=DeleteNode(&head, x, head1);
+    return head;
 }
-void Cancel(struct Order* head, struct Agent* head1, int n){
-    struct Order* headptr;
-    headptr=head;
-    while(head!=NULL){
-        if(head->orderno==n){
-            while(head1->IDA!=head->agentAssg){
-                head1=head1->nextA;
-            }
-            head1->ava=1;
-            head=DeleteNode(headptr,head);
-            printf("Your order has been canceled\n");
-        }
-        head=head->next;
-    }
+struct Order* Cancel(struct Order* head, struct Agent* head1){
+    int x;
+    printf("Enter the order number to cancel\n");
+    scanf("%d",&x);
+    head=DeleteNode(&head,x,head1);
+    printf("Order is canceled\n");
+    return head;
 }
 void PrintAgent(struct Agent* head){
     printf("All agent's details are as follows...\n");
@@ -229,6 +227,7 @@ void PrintAgent(struct Agent* head){
 void PrintLiveOrders(struct Order* head){
     if(head==NULL){
         printf("No live order present\n");
+        order=0;
     }
     else{
         while(head!=NULL){
@@ -278,11 +277,12 @@ void main(){
     user=initUser(user);
     agent=initAgent(agent);
     while(f==1){
+        printf("\n");
         printf("Following are the services we provide:\n");
         printf("Search:\n1. Based on category\n2. Based on cuisine\n3. Based on area\n");
         printf("Order:\n4. Place order\n5. Delivery\n6. Cancel order\n");
         printf("Show details:\n7. Print agent list with details\n8. Print live orders\n9. Print area wise agents\n10. Print restaurant details for given name\n11. Exit\n");
-        printf("Enter index number of the service you want...\n");
+        printf("Enter index number of the service you want...\n\n");
         scanf("%d",&x);
         switch(x){
             case 1: printf("Enter the category\n");
@@ -301,11 +301,9 @@ void main(){
                     scanf("%d",&i);
                     o=placeOrder(o,i,rest,user,agent);
                     break;
-            case 5: Delivery(o,agent);
+            case 5: o=Delivery(o,agent);
                     break;
-            case 6: printf("Enter the order number to cancel\n");
-                    scanf("%d",&i);
-                    Cancel(o,agent,i);
+            case 6: o=Cancel(o,agent);
                     break;
             case 7: PrintAgent(agent);
                     break;
