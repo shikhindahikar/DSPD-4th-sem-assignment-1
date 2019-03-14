@@ -1,29 +1,4 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-int order=0;
-struct Rest{            //Data which describes restaurant
-    char nameR[20], addR[20], category[20];
-    char menu[5][20];
-    int seats,MaxSeats;         //seats available and maximum seats in a given restaurant
-    struct rest* nextR;
-};
-struct User{                //Data which describes user
-    char nameU[20], addU[20], phoneU[10];
-    int IDU;                 //user will be assigned a user ID for convenience
-    struct user* nextU;
-};
-struct Agent{           //Data which describes agent
-    char nameA[20], phoneA[10], Add[20];
-    int IDA;             //agent will be assigned a agent ID for convenience
-    int ava;                //when  ava = 1 agent is available otherwise busy
-    struct agent* nextA;
-};
-struct Order{
-    char name[20], rest[20], item[20];
-    int orderno,agentAssg;
-    struct Order* next;
-};
+#include "HungryApp.h"
 struct Rest* initRest(struct Rest* head){
     struct Rest* temp=NULL;
     int i,j;
@@ -281,7 +256,7 @@ void main(){
         printf("Following are the services we provide:\n");
         printf("Search:\n1. Based on category\n2. Based on cuisine\n3. Based on area\n");
         printf("Order:\n4. Place order\n5. Delivery\n6. Cancel order\n");
-        printf("Show details:\n7. Print agent list with details\n8. Print live orders\n9. Print area wise agents\n10. Print restaurant details for given name\n11. Exit\n");
+        printf("Show details:\n7. Print agent list with details\n8. Print live orders\n9. Print area wise agents\n10. Print restaurant details\n11. Exit\n");
         printf("Enter index number of the service you want...\n\n");
         scanf("%d",&x);
         switch(x){
